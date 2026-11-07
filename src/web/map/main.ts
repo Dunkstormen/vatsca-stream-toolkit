@@ -4,8 +4,11 @@
 //
 // URL parameters: director=1, status=1 (show connection problems on the page), server=ws://...
 
-import maplibregl, { type GeoJSONSource, type StyleSpecification } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import type { GeoJSONSource, StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+// MapLibre 6 loads its worker from a separate module; let Vite emit it and point MapLibre at it.
+import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { Protocol } from "pmtiles";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { Link } from "../common/link";
@@ -29,6 +32,8 @@ document.body.classList.toggle("director", director);
 const GLYPHS = `${location.origin}/basemap/fonts/{fontstack}/{range}.pbf`;
 const TRAIL_POINTS = 12;
 const FRAME_MS = 50;
+
+maplibregl.setWorkerUrl(new URL(workerUrl, location.href).href);
 
 const protocol = new Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);

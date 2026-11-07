@@ -19,7 +19,7 @@ export const DEMO_PMTILES = "https://demo-bucket.protomaps.com/v4.pmtiles";
 const LOCAL_TILES_PATH = "/tiles/map.pmtiles";
 
 const MIME: Record<string, string> = {
-  ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css",
+  ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css",
   ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon",
   ".pmtiles": "application/octet-stream", ".pbf": "application/x-protobuf", ".woff2": "font/woff2",
 };
