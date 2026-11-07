@@ -7,6 +7,20 @@ import { app, BrowserWindow, dialog, shell } from "electron";
 import { Toolkit } from "../server/server";
 
 let toolkit: Toolkit | null = null;
+let mainWindow: BrowserWindow | null = null;
+
+// One instance only: a second launch can't get the server port, so it focuses the open window instead.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (!mainWindow) return;
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  });
+  app.whenReady().then(start);
+}
 
 async function createWindow(url: string): Promise<void> {
   const win = new BrowserWindow({
@@ -16,6 +30,8 @@ async function createWindow(url: string): Promise<void> {
     backgroundColor: "#0f1216",
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
+  mainWindow = win;
+  win.on("closed", () => { if (mainWindow === win) mainWindow = null; });
   win.setMenuBarVisibility(false);
   // Links such as "open in browser" go to the system browser, not a new Electron window.
   win.webContents.setWindowOpenHandler(({ url: target }) => {
@@ -25,7 +41,7 @@ async function createWindow(url: string): Promise<void> {
   await win.loadURL(`${url}/control.html`);
 }
 
-app.whenReady().then(async () => {
+async function start(): Promise<void> {
   toolkit = new Toolkit({
     dataDir: app.getPath("userData"),
     webRoot: path.resolve(__dirname, "../../web"),
@@ -43,7 +59,7 @@ app.whenReady().then(async () => {
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) void createWindow(url);
   });
-});
+}
 
 app.on("window-all-closed", () => app.quit());
 app.on("before-quit", () => {

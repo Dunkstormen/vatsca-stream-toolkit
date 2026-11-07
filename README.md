@@ -61,7 +61,7 @@ Settings live as JSON next to each other and can be hand-edited (restart after e
 ## Develop
 
 ```
-npm install
+npm install        # npm 12 runs only the install scripts listed in package.json "allowScripts" (electron, esbuild)
 npm start          # build and open the Electron app
 npm run serve      # same server without Electron: http://localhost:7878
 npm run dev        # rebuild on change + headless server
