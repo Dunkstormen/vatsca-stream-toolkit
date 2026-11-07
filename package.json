@@ -1,0 +1,39 @@
+{
+  "name": "vatsca-stream-toolkit",
+  "version": "0.1.0",
+  "description": "Stream tools for VATSIM Scandinavia, fed live from EuroScope",
+  "main": "dist/node/electron/main.js",
+  "scripts": {
+    "build:web": "vite build",
+    "build:node": "tsc -p tsconfig.node.json",
+    "build": "npm run build:web && npm run build:node",
+    "start": "npm run build && electron .",
+    "serve": "npm run build && node dist/node/server/cli.js --data .data",
+    "dev": "npm run build:node && concurrently -k \"vite build --watch\" \"tsc -p tsconfig.node.json --watch --preserveWatchOutput\" \"node dist/node/server/cli.js --data .data\"",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json --noEmit",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@protomaps/basemaps": "^5.7.2",
+    "maplibre-gl": "^5.24.0",
+    "pmtiles": "^4.5.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "ws": "^8.22.1"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.5",
+    "electron": "^37.10.3",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.5",
+    "vitest": "^3.2.7"
+  },
+  "private": true
+}
